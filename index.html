@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <meta name="description" content="Бункер — онлайн-магазин оружия без лицензий и бумаг. Пневматика, охолощенное, сигнальное, травматическое оружие с доставкой по России. Выбирайте модель и заказывайте через Telegram.">
+  <meta name="keywords" content="купить оружие без лицензии, онлайн магазин оружия, пневматический пистолет купить, охолощенное оружие, сигнальное оружие, травмат, бункер">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://oruzhie.github.io/">
+  <title>Бункер — оружие без лицензий и документов | Онлайн-магазин</title>
+
+  <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="style.css"></noscript>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js" defer></script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Бункер",
+      "url": "https://oruzhie.github.io",
+      "description": "Онлайн-магазин оружия без лицензий и документов. Пневматика, охолощенное, сигнальное, травматическое оружие.",
+      "sameAs": ["https://t.me/Bunker24_7"],
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": "Russian",
+        "url": "tg://resolve?domain=Bunker24_7"
+      }]
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": [
+        {"@type": "ListItem","position": 1,"name": "Пневматика","url": "https://oruzhie.github.io/pnevmat.html","description": "Пистолеты и винтовки до 7,5 Дж"},
+        {"@type": "ListItem","position": 2,"name": "Охолощенное оружие","url": "https://oruzhie.github.io/oxoloshchenka.html","description": "Списанные боевые образцы с имитацией выстрела"},
+        {"@type": "ListItem","position": 3,"name": "Сигнальное оружие","url": "https://oruzhie.github.io/sxp.html","description": "Пистолеты и ракетницы для подачи сигналов"},
+        {"@type": "ListItem","position": 4,"name": "Травматическое оружие","url": "https://oruzhie.github.io/travmat.html","description": "ОООП и резинострелы"},
+        {"@type": "ListItem","position": 5,"name": "Боевое / Охотничье","url": "https://oruzhie.github.io/boevoe.html","description": "Информация о нарезном и гладкоствольном"},
+        {"@type": "ListItem","position": 6,"name": "Экспертный гид","url": "https://oruzhie.github.io/statya.html","description": "Как выбрать оружие в 2026"}
+      ]
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Как работает покупка оружия в Бункере?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Выберите модель на сайте и напишите нам в Telegram. Мы отправляем посылку транспортной компанией. Никаких документов, лицензий и визитов в магазин."
+        }
+      }]
+    }
+  </script>
+
+  <style>
+    :root {
+      --color-bg: #0b0b0b;
+      --color-accent: #c9a96e;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: #e0e0e0;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #f5f5f5;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--color-accent);
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .main-nav a {
+      color: #b0b0b0;
+      font-size: 0.95rem;
+      text-decoration: none;
+      padding: 6px 0;
+      border-bottom: 1px solid transparent;
+    }
+
+    .main-nav a:hover, .main-nav a:focus {
+      color: #fff;
+      border-bottom-color: var(--color-accent);
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 30px 0;
+      text-align: center;
+      color: #707070;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <a href="index.html" class="logo">Бунк<span>ер</span></a>
+      <nav class="main-nav">
+        <a href="pnevmat.html">Пневматика</a>
+        <a href="oxoloshchenka.html">Охолощенное</a>
+        <a href="sxp.html">Сигнальное</a>
+        <a href="travmat.html">Травмат</a>
+        <a href="boevoe.html">Боевое</a>
+        <a href="statya.html">Гайды</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Бункер — оружие без лицензий и документов</h1>
+        <p>Пневматика, охолощенное, сигнальное и травматическое оружие в одном месте. Заказ полностью онлайн — без походов в ЛРО и заполнения бумаг. Просто выберите модель и напишите нам в Telegram.</p>
+        <a href="tg://resolve?domain=Bunker24_7" class="cta-button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2.5L2.5 10.5L10.5 13.5L13.5 21.5L21.5 2.5Z"/><line x1="10.5" y1="13.5" x2="16.5" y2="7.5"/></svg>
+          Перейти в Telegram
+        </a>
+      </section>
+
+      <div class="categories-grid">
+        <a href="pnevmat.html" class="category-card">
+          <div class="category-icon" aria-hidden="true">🎯</div>
+          <h2>Пневматика</h2>
+          <p>Пистолеты и винтовки до 7,5 Дж — без лицензии, без разрешений. Более 30 моделей в наличии.</p>
+          <span class="category-link">Выбрать пневматику</span>
+        </a>
+        <a href="oxoloshchenka.html" class="category-card">
+          <div class="category-icon" aria-hidden="true">🔫</div>
+          <h2>Охолощенное оружие</h2>
+          <p>Списанные боевые образцы с имитацией выстрела. Полный цикл производства холостого выстрела.</p>
+          <span class="category-link">Смотреть охолощенное</span>
+        </a>
+        <a href="sxp.html" class="category-card">
+          <div class="category-icon" aria-hidden="true">🚀</div>
+          <h2>Сигнальное оружие</h2>
+          <p>Пистолеты и ракетницы для подачи световых и звуковых сигналов. От 2500 рублей.</p>
+          <span class="category-link">Выбрать сигнальное</span>
+        </a>
+        <a href="travmat.html" class="category-card">
+          <div class="category-icon" aria-hidden="true">🛡️</div>
+          <h2>Травматическое оружие</h2>
+          <p>ОООП и резинострелы. Компактные модели для самообороны. Для приобретения может потребоваться лицензия — уточняйте в Telegram.</p>
+          <span class="category-link">Смотреть травматы</span>
+        </a>
+        <a href="boevoe.html" class="category-card">
+          <div class="category-icon" aria-hidden="true">⚔️</div>
+          <h2>Боевое / Охотничье</h2>
+          <p>Информация о нарезном и гладкоствольном оружии. Ознакомительный раздел, помощь с выбором.</p>
+          <span class="category-link">Подробнее</span>
+        </a>
+        <a href="statya.html" class="category-card">
+          <div class="category-icon" aria-hidden="true">📘</div>
+          <h2>Экспертный гид</h2>
+          <p>Как выбрать оружие в 2026. Сравнения, законы, частые вопросы. Без воды и канцелярита.</p>
+          <span class="category-link">Читать статьи</span>
+        </a>
+      </div>
+
+      <div class="info-block">
+        <p><strong>Как это работает:</strong> Вы оформляете заказ через наш Telegram-канал. Мы отправляем посылку транспортной компанией. Никаких документов, лицензий и визитов в магазин — всё онлайн. Работаем по всей России.</p>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2026 Бункер. Онлайн-магазин оружия. <a href="tg://resolve?domain=Bunker24_7">Telegram: @Bunker24_7</a></p>
+    </footer>
+  </div>
+
+  <script defer src="main.js"></script>
+</body>
+</html>
