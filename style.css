@@ -1,4 +1,3 @@
-/* === СБРОС И БАЗА === */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -14,13 +13,12 @@ html, body {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: #0a0a0a;
-  color: #f5f5f5;
+  color: #f0f0f0;
   line-height: 1.5;
   position: relative;
   min-height: 100vh;
 }
 
-/* Панорамный фон */
 #panorama-container {
   position: fixed;
   top: 0;
@@ -28,50 +26,44 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  pointer-events: none;
 }
 
-/* Все остальные элементы поверх */
 body > *:not(#panorama-container) {
   position: relative;
   z-index: 1;
 }
 
-/* Общий фон секций с усиленной контрастностью */
 .site-header,
 .hero,
 .categories,
 .hits,
 .benefits,
 .site-footer {
-  background-color: rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
 }
 
-/* Ссылки */
 a {
-  color: #ff8c42;
+  color: #d35400;
   text-decoration: none;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-  transition: color 0.2s, text-shadow 0.2s;
+  transition: color 0.2s ease, text-shadow 0.2s;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 a:hover {
-  color: #ffb380;
-  text-shadow: 0 2px 10px rgba(0,0,0,1);
+  color: #ff8c42;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
 }
 
-/* Шапка */
 .site-header {
   padding: 1rem 2rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo {
@@ -80,7 +72,7 @@ a:hover {
   letter-spacing: 1px;
   color: #ffffff;
   text-transform: uppercase;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
 }
 
 .nav-links {
@@ -105,7 +97,6 @@ a:hover {
   border-bottom-color: #ff8c42;
 }
 
-/* Герой */
 .hero {
   text-align: center;
   padding: 3rem 1.5rem 2.5rem;
@@ -120,7 +111,7 @@ a:hover {
   margin-bottom: 1rem;
   color: #ffffff;
   line-height: 1.3;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.95);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.9);
 }
 
 .hero-description,
@@ -131,8 +122,8 @@ a:hover {
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  color: #f0f0f0;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+  color: #e8e8e8;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
 }
 
 .cta-button {
@@ -147,16 +138,16 @@ a:hover {
   letter-spacing: 0.5px;
   transition: background-color 0.2s, transform 0.15s;
   text-transform: uppercase;
-  box-shadow: 0 4px 15px rgba(211, 84, 0, 0.6);
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 15px rgba(211, 84, 0, 0.5);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .cta-button:hover {
   background-color: #e67e22;
   transform: translateY(-2px);
+  color: #fff;
 }
 
-/* Категории */
 .categories {
   padding: 2.5rem 1.5rem;
   max-width: 1000px;
@@ -169,7 +160,7 @@ a:hover {
   text-align: center;
   margin-bottom: 2rem;
   color: #fff;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
 .category-list {
@@ -181,25 +172,24 @@ a:hover {
 
 .category-item a {
   display: block;
-  background-color: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background-color: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px;
   padding: 1.8rem 1rem;
   text-align: center;
   font-weight: 600;
   font-size: 1.1rem;
-  color: #eaeaea;
+  color: #e0e0e0;
   transition: background-color 0.25s, border-color 0.25s, color 0.25s;
-  text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
 .category-item a:hover {
-  background-color: rgba(211, 84, 0, 0.25);
+  background-color: rgba(211, 84, 0, 0.2);
   border-color: #d35400;
   color: #fff;
 }
 
-/* Хиты продаж */
 .hits {
   padding: 2.5rem 1.5rem;
   max-width: 1000px;
@@ -212,7 +202,7 @@ a:hover {
   text-align: center;
   margin-bottom: 2rem;
   color: #fff;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
 .hits-grid {
@@ -222,8 +212,8 @@ a:hover {
 }
 
 .hit-item {
-  background-color: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
@@ -232,7 +222,7 @@ a:hover {
 
 .hit-item:hover {
   border-color: #d35400;
-  background-color: rgba(211,84,0,0.15);
+  background-color: rgba(211,84,0,0.1);
 }
 
 .hit-model {
@@ -241,16 +231,15 @@ a:hover {
   font-weight: 700;
   color: #ff8c42;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
 
 .hit-desc {
   font-size: 0.95rem;
-  color: #dddddd;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+  color: #cfcfcf;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
-/* Преимущества */
 .benefits {
   padding: 2.5rem 1.5rem;
   max-width: 1000px;
@@ -263,7 +252,7 @@ a:hover {
   text-align: center;
   margin-bottom: 2rem;
   color: #fff;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
 .benefits-grid {
@@ -274,30 +263,29 @@ a:hover {
 
 .benefit {
   text-align: center;
-  background-color: rgba(255,255,255,0.04);
+  background-color: rgba(255,255,255,0.03);
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .benefit h3 {
   font-size: 1.3rem;
   color: #ff8c42;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
 }
 
 .benefit p {
   font-size: 0.95rem;
-  color: #e0e0e0;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+  color: #d0d0d0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
-/* Футер */
 .site-footer {
   padding: 1.5rem;
   text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -305,7 +293,7 @@ a:hover {
   gap: 1rem;
   font-size: 0.9rem;
   color: #cccccc;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
 .footer-nav {
@@ -321,12 +309,6 @@ a:hover {
   color: #fff;
 }
 
-/* Убираем возможную инверсию для canvas/изображений */
-canvas, img {
-  filter: none !important;
-}
-
-/* Адаптивность */
 @media (max-width: 768px) {
   .site-header {
     flex-direction: column;
