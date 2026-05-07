@@ -28,7 +28,7 @@
 
         const geometry = new THREE.SphereGeometry(100, 128, 128);
         const textureLoader = new THREE.TextureLoader();
-        const textureUrl = 'assets/panorama_bunker.jpg';
+        const textureUrl = 'assets/panorama_bunker.png';
 
         const material = new THREE.MeshBasicMaterial({
             map: textureLoader.load(textureUrl, undefined, undefined, function(err) {
