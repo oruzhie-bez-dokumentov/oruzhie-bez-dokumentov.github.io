@@ -15,15 +15,28 @@
   container.appendChild(renderer.domElement);
 
   var geometry = new THREE.SphereGeometry(500, 60, 40);
-  var texture = new THREE.TextureLoader().load('assets/panorama_bunker.png');
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
+  var textureLoader = new THREE.TextureLoader();
   var material = new THREE.MeshBasicMaterial({
-    map: texture,
+    color: 0x333333,
     side: THREE.BackSide
   });
   var sphere = new THREE.Mesh(geometry, material);
   scene.add(sphere);
+
+  textureLoader.load(
+    'assets/panorama_bunker.png',
+    function(texture) {
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      material.map = texture;
+      material.color.set(0xffffff);
+      material.needsUpdate = true;
+    },
+    undefined,
+    function(err) {
+      console.warn('Фоновая панорама не загружена, используется резервная заливка.');
+    }
+  );
 
   var isUserInteracting = false;
   var onPointerDownMouseX = 0, onPointerDownMouseY = 0;
@@ -33,7 +46,15 @@
   var targetPhi = 0, targetTheta = 0;
   var friction = 0.075;
 
+  function isInteractiveElement(target) {
+    var tag = target.tagName.toLowerCase();
+    return tag === 'a' || tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea' || target.closest('a, button, input, select, textarea');
+  }
+
   function onPointerDown(event) {
+    if (isInteractiveElement(event.target)) {
+      return;
+    }
     event.preventDefault();
     var clientX, clientY;
     if (event.touches) {
@@ -52,6 +73,7 @@
 
   function onPointerMove(event) {
     if (!isUserInteracting) return;
+    event.preventDefault();
     var clientX, clientY;
     if (event.touches) {
       clientX = event.touches[0].clientX;
@@ -65,23 +87,29 @@
     lat = Math.max(-85, Math.min(85, lat));
   }
 
-  function onPointerUp() {
+  function onPointerUp(event) {
+    if (event && isInteractiveElement(event.target)) {
+      return;
+    }
     isUserInteracting = false;
   }
 
   function onWheel(event) {
+    if (isInteractiveElement(event.target)) {
+      return;
+    }
     event.preventDefault();
-    return false;
   }
 
-  container.addEventListener('mousedown', onPointerDown, { passive: false });
-  container.addEventListener('mousemove', onPointerMove, { passive: false });
-  container.addEventListener('mouseup', onPointerUp);
-  container.addEventListener('mouseleave', onPointerUp);
-  container.addEventListener('touchstart', onPointerDown, { passive: false });
-  container.addEventListener('touchmove', onPointerMove, { passive: false });
-  container.addEventListener('touchend', onPointerUp);
-  container.addEventListener('wheel', onWheel, { passive: false });
+  document.addEventListener('mousedown', onPointerDown, { passive: false });
+  document.addEventListener('mousemove', onPointerMove, { passive: false });
+  document.addEventListener('mouseup', onPointerUp);
+  document.addEventListener('mouseleave', onPointerUp);
+  document.addEventListener('touchstart', onPointerDown, { passive: false });
+  document.addEventListener('touchmove', onPointerMove, { passive: false });
+  document.addEventListener('touchend', onPointerUp);
+  document.addEventListener('touchcancel', onPointerUp);
+  document.addEventListener('wheel', onWheel, { passive: false });
 
   window.addEventListener('resize', function() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -92,13 +120,8 @@
   function animate() {
     requestAnimationFrame(animate);
 
-    if (isUserInteracting) {
-      targetPhi = THREE.MathUtils.degToRad(lat);
-      targetTheta = THREE.MathUtils.degToRad(lon);
-    } else {
-      targetPhi = THREE.MathUtils.degToRad(lat);
-      targetTheta = THREE.MathUtils.degToRad(lon);
-    }
+    targetPhi = THREE.MathUtils.degToRad(lat);
+    targetTheta = THREE.MathUtils.degToRad(lon);
 
     phi += (targetPhi - phi) * friction;
     theta += (targetTheta - theta) * friction;
@@ -112,9 +135,4 @@
   }
 
   animate();
-
-  window.addEventListener('load', function() {
-    texture.encoding = THREE.sRGBEncoding;
-    texture.needsUpdate = true;
-  });
 })();
