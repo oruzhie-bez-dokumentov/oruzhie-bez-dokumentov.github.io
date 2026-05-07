@@ -1,177 +1,141 @@
-(function () {
-  'use strict';
+(function() {
+    'use strict';
 
-  if (typeof THREE === 'undefined') {
-    console.warn('Three.js not loaded. Panorama disabled.');
-    return;
-  }
+    let scene, camera, renderer, sphere;
+    let isUserInteracting = false;
+    let onMouseDownMouseX = 0, onMouseDownMouseY = 0;
+    let lon = 0, lat = 0;
+    let phi = 0, theta = 0;
+    let targetPhi = 0, targetTheta = 0;
+    const fov = 75;
+    const near = 0.1;
+    const far = 1000;
 
-  const container = document.querySelector('.panorama-container');
-  if (!container) return;
+    function initPanorama() {
+        const container = document.getElementById('panorama-container');
+        if (!container || typeof THREE === 'undefined') return;
 
-  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  let canvas, renderer, scene, camera, sphere;
-  let animationId = null;
-  let lon = 0,
-    lat = 0;
-  let isUserInteracting = false;
-  let onMouseDownMouseX = 0,
-    onMouseDownMouseY = 0;
-  let onMouseDownLon = 0,
-    onMouseDownLat = 0;
-  let prevTouchX = 0,
-    prevTouchY = 0;
-
-  function initPanorama() {
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(
-      'assets/bunker.png',
-      function (texture) {
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(
-          75,
-          window.innerWidth / window.innerHeight,
-          0.1,
-          1000
-        );
-        camera.position.set(0, 0, 0);
+        scene.background = new THREE.Color(0x0a0a0a);
 
-        const geometry = new THREE.SphereGeometry(500, 60, 40);
-        geometry.scale(-1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ map: texture });
+        camera = new THREE.PerspectiveCamera(fov, container.clientWidth / container.clientHeight, near, far);
+        camera.position.set(0, 0, 0.1);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const geometry = new THREE.SphereGeometry(100, 128, 128);
+        const textureLoader = new THREE.TextureLoader();
+        const textureUrl = 'assets/panorama_bunker.jpg';
+
+        const material = new THREE.MeshBasicMaterial({
+            map: textureLoader.load(textureUrl, undefined, undefined, function(err) {
+                console.warn('Текстура панорамы не загружена, используется резервный цвет');
+                material.map = null;
+                material.color = new THREE.Color(0x1a1a1a);
+                material.needsUpdate = true;
+            }),
+            side: THREE.BackSide
+        });
+
         sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
 
-        renderer = new THREE.WebGLRenderer({
-          canvas: canvas,
-          alpha: false,
-          antialias: true,
-        });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setAnimationLoop(animate);
+        container.addEventListener('mousedown', onPointerDown, false);
+        container.addEventListener('mousemove', onPointerMove, false);
+        container.addEventListener('mouseup', onPointerUp, false);
+        container.addEventListener('touchstart', onPointerDown, { passive: false });
+        container.addEventListener('touchmove', onPointerMove, { passive: false });
+        container.addEventListener('touchend', onPointerUp, false);
+        container.addEventListener('wheel', onDocumentMouseWheel, { passive: false });
+        window.addEventListener('resize', onWindowResize, false);
 
-        canvas.style.display = 'block';
-        container.appendChild(canvas);
-
-        updateCamera();
-      },
-      undefined,
-      function () {
-        console.error('Failed to load panorama texture.');
-        container.remove();
-      }
-    );
-  }
-
-  function animate() {
-    if (!isUserInteracting) {
-      lon += 0.03;
+        animate();
     }
-    updateCamera();
-    if (renderer && scene && camera) {
-      renderer.render(scene, camera);
+
+    function onPointerDown(event) {
+        event.preventDefault();
+        isUserInteracting = true;
+        const clientX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
+        const clientY = event.clientY || (event.touches && event.touches[0].clientY) || 0;
+        onMouseDownMouseX = clientX;
+        onMouseDownMouseY = clientY;
+        targetPhi = phi;
+        targetTheta = theta;
     }
-  }
 
-  function updateCamera() {
-    const phi = THREE.MathUtils.degToRad(90 - lat);
-    const theta = THREE.MathUtils.degToRad(lon);
-    const target = new THREE.Vector3(
-      Math.sin(phi) * Math.cos(theta),
-      Math.cos(phi),
-      Math.sin(phi) * Math.sin(theta)
-    );
-    camera.lookAt(target);
-  }
-
-  function onMouseDown(e) {
-    e.preventDefault();
-    isUserInteracting = true;
-    onMouseDownMouseX = e.clientX;
-    onMouseDownMouseY = e.clientY;
-    onMouseDownLon = lon;
-    onMouseDownLat = lat;
-  }
-
-  function onMouseMove(e) {
-    if (!isUserInteracting) return;
-    e.preventDefault();
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-    lon = onMouseDownLon + (clientX - onMouseDownMouseX) * 0.15;
-    lat = onMouseDownLat - (clientY - onMouseDownMouseY) * 0.15;
-    lat = Math.max(-85, Math.min(85, lat));
-  }
-
-  function onMouseUp() {
-    isUserInteracting = false;
-  }
-
-  function onTouchStart(e) {
-    if (e.touches.length !== 1) return;
-    e.preventDefault();
-    isUserInteracting = true;
-    prevTouchX = e.touches[0].clientX;
-    prevTouchY = e.touches[0].clientY;
-    onMouseDownLon = lon;
-    onMouseDownLat = lat;
-  }
-
-  function onTouchMove(e) {
-    if (!isUserInteracting || e.touches.length !== 1) return;
-    e.preventDefault();
-    const touchX = e.touches[0].clientX;
-    const touchY = e.touches[0].clientY;
-    const deltaX = touchX - prevTouchX;
-    const deltaY = touchY - prevTouchY;
-    lon -= deltaX * 0.15;
-    lat += deltaY * 0.15;
-    lat = Math.max(-85, Math.min(85, lat));
-    prevTouchX = touchX;
-    prevTouchY = touchY;
-  }
-
-  function onTouchEnd() {
-    isUserInteracting = false;
-  }
-
-  function onWheel(e) {
-    e.preventDefault();
-  }
-
-  function onResize() {
-    if (camera && renderer) {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    function onPointerMove(event) {
+        if (!isUserInteracting) return;
+        event.preventDefault();
+        const clientX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
+        const clientY = event.clientY || (event.touches && event.touches[0].clientY) || 0;
+        const deltaX = clientX - onMouseDownMouseX;
+        const deltaY = clientY - onMouseDownMouseY;
+        targetPhi = phi + deltaX * 0.3;
+        targetTheta = theta - deltaY * 0.3;
+        targetTheta = Math.max(-85, Math.min(85, targetTheta));
     }
-  }
 
-  function setupCanvas() {
-    canvas = document.createElement('canvas');
-    canvas.style.display = 'none';
-    container.appendChild(canvas);
-
-    document.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('touchstart', onTouchStart, { passive: false });
-    document.addEventListener('touchmove', onTouchMove, { passive: false });
-    document.addEventListener('touchend', onTouchEnd);
-    document.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('resize', onResize);
-  }
-
-  function start() {
-    setupCanvas();
-    if (document.readyState === 'complete') {
-      initPanorama();
-    } else {
-      window.addEventListener('load', initPanorama);
+    function onPointerUp() {
+        isUserInteracting = false;
     }
-  }
 
-  start();
+    function onDocumentMouseWheel(event) {
+        event.preventDefault();
+    }
+
+    function onWindowResize() {
+        const container = document.getElementById('panorama-container');
+        if (!container || !camera || !renderer) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    function animate() {
+        if (!sphere || !camera) return;
+        requestAnimationFrame(animate);
+
+        const lerpFactor = 0.1;
+        phi += (targetPhi - phi) * lerpFactor;
+        theta += (targetTheta - theta) * lerpFactor;
+
+        const latRad = THREE.MathUtils.degToRad(theta);
+        const lonRad = THREE.MathUtils.degToRad(phi);
+        const lookAtX = Math.cos(latRad) * Math.cos(lonRad);
+        const lookAtY = Math.sin(latRad);
+        const lookAtZ = Math.cos(latRad) * Math.sin(lonRad);
+        camera.lookAt(lookAtX, lookAtY, lookAtZ);
+
+        renderer.render(scene, camera);
+    }
+
+    window.addEventListener('load', function() {
+        if (typeof THREE !== 'undefined') {
+            initPanorama();
+        } else {
+            const checkThree = setInterval(function() {
+                if (typeof THREE !== 'undefined') {
+                    clearInterval(checkThree);
+                    initPanorama();
+                }
+            }, 100);
+            setTimeout(function() { clearInterval(checkThree); }, 10000);
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href="tg://resolve?domain=Bunker24_7"]');
+        if (link) {
+            if (typeof navigator.sendBeacon === 'function') {
+                const data = new URLSearchParams();
+                data.append('event', 'telegram_click');
+                data.append('page', window.location.pathname);
+                navigator.sendBeacon('/analytics', data);
+            }
+        }
+    });
+
 })();
