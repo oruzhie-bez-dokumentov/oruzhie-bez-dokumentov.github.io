@@ -1,74 +1,125 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="robots" content="index, follow">
-    <meta name="revisit-after" content="3 days">
-    <meta name="yandex-verification" content="placeholder">
-    <title>Бункер — оружие без разрешений. Любой ствол онлайн</title>
-    <meta name="description" content="Бункер позволяет купить пневмат, охолощенку, СХП, травмат, боевое и патроны без лицензий и бумаг. Быстрая сделка через Telegram. Полная конфиденциальность.">
-    <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="style.css"></noscript>
-    <script defer src="main.js"></script>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <script async src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Оружейный магазин Бункер — оружие без лицензий и документов, купить онлайн</title>
+<meta name="description" content="Бункер — онлайн-магазин оружия без документов и лицензий. Пневматика, охолощенное, травмат, СХП, боевое, патроны. Хиты: PM PRO, Тень-28, Оса, Grand Power T12. Доставка по РФ и СНГ.">
+<meta name="robots" content="index, follow">
+<link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="style.css"></noscript>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="main.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Оружейный магазин Бункер",
+  "url": "https://oruzhie-bez-dokumentov.github.io/",
+  "description": "Онлайн-продажа оружия без лицензий и документов: пневматика, охолощенное, травмат, СХП, боевое оружие, патроны. Хиты продаж: PM PRO, Тень-28, Оса, Grand Power T12. Доставка по РФ и СНГ.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "",
+    "contactType": "customer service",
+    "availableLanguage": "Russian"
+  },
+  "sameAs": [
+    "tg://resolve?domain=Bunker24_7"
+  ]
+}
+</script>
 </head>
 <body>
-    <div id="panorama-container" aria-hidden="true"></div>
-    <header class="site-header">
-        <a href="/" class="logo" aria-label="Бункер — на главную">Бункер</a>
-        <nav class="main-nav" aria-label="Основные разделы">
-            <ul>
-                <li><a href="pnevmat.html">Пневмат</a></li>
-                <li><a href="oxoloshchenka.html">Охлощенка</a></li>
-                <li><a href="sxp.html">СХП</a></li>
-                <li><a href="travmat.html">Травмат</a></li>
-                <li><a href="boevoe.html">Боевое</a></li>
-                <li><a href="patrony.html">Патроны</a></li>
-                <li><a href="statya.html">Гид</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="hero">
-            <h1>Бункер: твой надёжный канал в мир оружия без бюрократии</h1>
-            <p class="subheading">Никаких лицензий. Никаких документов. Только ты и нужный ствол.</p>
-            <a href="tg://resolve?domain=Bunker24_7" class="btn-primary">Перейти в Telegram</a>
-        </section>
-        <section class="about">
-            <h2>Почему Бункер работает иначе</h2>
-            <p>В двухтысячных мы устали собирать справки и ждать одобрений. Тогда появился Бункер — закрытое сообщество, где оружие выбирают по характеристикам, а не по разрешительным штампам. С 2018 года мы избавили сотни клиентов от бумажной волокиты: ни один заказ не потребовал лицензии, очередь в ЛРО обходит нас стороной.</p>
-            <ul class="features">
-                <li><strong>Анонимно.</strong> Не просим паспортные данные, не требуем лицензию. Все сделки строятся на доверии.</li>
-                <li><strong>Мгновенно.</strong> Обсудили детали в Telegram — и заказ комплектуется в тот же день.</li>
-                <li><strong>Надёжно.</strong> Упаковка не вызывает подозрений, содержимое замаскировано под хозтовары.</li>
-                <li><strong>Проверено.</strong> Каждый ствол проходит тестовый отстрел, прежде чем попасть в каталог.</li>
-            </ul>
-        </section>
-        <section class="categories-grid">
-            <h2>Что можно забрать в Бункере</h2>
-            <div class="grid">
-                <a href="pnevmat.html" class="card">Пневматика — от 3 до 700 джоулей</a>
-                <a href="oxoloshchenka.html" class="card">Охолощенное — имитация боя без пули</a>
-                <a href="sxp.html" class="card">СХП — сигнал и светошум</a>
-                <a href="travmat.html" class="card">Травмат — ООП под скрытое ношение</a>
-                <a href="boevoe.html" class="card">Боевое и охотничье — редкие позиции</a>
-                <a href="patrony.html" class="card">Патроны — от Флобера до усиленных</a>
-            </div>
-        </section>
-        <section class="cta-bottom">
-            <h2>Готов выбрать?</h2>
-            <p>Модели, цены и условия — только в личном общении. Никаких онлайн-корзин и следов на сайте.</p>
-            <a href="tg://resolve?domain=Bunker24_7" class="btn-primary">Связаться в Telegram</a>
-            <p class="hint">Бот ответит в течение 15 минут, 24/7.</p>
-        </section>
-    </main>
-    <footer>
-        <p>Бункер. С 2018. Информация ознакомительная.</p>
-        <nav aria-label="Дополнительные ссылки">
-            <a href="statya.html">Гид по выбору</a>
-        </nav>
-    </footer>
+<div id="panorama-container"></div>
+<header class="site-header">
+  <nav class="main-nav" aria-label="Основная навигация">
+    <a href="/" class="logo" aria-current="page">Бункер</a>
+    <ul class="nav-links">
+      <li><a href="pnevmat.html">Пневматика</a></li>
+      <li><a href="oxoloshchenka.html">Охолощенное</a></li>
+      <li><a href="sxp.html">СХП</a></li>
+      <li><a href="travmat.html">Травмат</a></li>
+      <li><a href="boevoe.html">Боевое</a></li>
+      <li><a href="patrone.html">Патроны</a></li>
+      <li><a href="statya.html">Гид по выбору</a></li>
+    </ul>
+  </nav>
+</header>
+<main class="hero">
+  <h1 class="hero-title">Оружейный магазин «Бункер» — полный арсенал без бумаг и лицензий</h1>
+  <p class="hero-description">Мы продаём гладкоствольные и нарезные ружья всех популярных калибров, помповые и полуавтоматические дробовики, травматические пистолеты и револьверы, а также боеприпасы к ним. Никаких разрешений, визитов в стационарный магазин и лишних формальностей — вы получаете нужный образец удалённо.</p>
+  <p class="hero-mission">Бункер с 2024 года поставляет гражданское оружие для охоты, самообороны и спортивной стрельбы. В каталоге представлены модели ведущих мировых заводов: от бюджетных решений до профессиональных комплексов. Мы понимаем, что удобство использования — залог успешной охоты и безопасности, поэтому предлагаем в том числе варианты для левшей.</p>
+  <p class="hero-service">Широкий ассортимент оружия и боеприпасов приятно вас удивит. Воспользовавшись консультацией наших квалифицированных менеджеров, вы сможете найти товар, наиболее отвечающий вашим потребностям. Совершив покупку, вы получите не только соответствующий вашим задачам продукт, но и отличный сервис, благодаря которому, мы надеемся, вы будете возвращаться к нам снова.</p>
+  <a href="tg://resolve?domain=Bunker24_7" class="cta-button">Заказать в Telegram</a>
+</main>
+<section class="categories">
+  <h2 class="categories-title">Категории оружия</h2>
+  <ul class="category-list">
+    <li class="category-item"><a href="pnevmat.html">Пневматическое оружие</a></li>
+    <li class="category-item"><a href="oxoloshchenka.html">Охолощенное оружие</a></li>
+    <li class="category-item"><a href="sxp.html">Сигнальное оружие (СХП)</a></li>
+    <li class="category-item"><a href="travmat.html">Травматическое оружие (ОООП)</a></li>
+    <li class="category-item"><a href="boevoe.html">Боевое и охотничье</a></li>
+    <li class="category-item"><a href="patrone.html">Патроны и боеприпасы</a></li>
+  </ul>
+</section>
+<section class="hits">
+  <h2 class="hits-title">Хиты продаж</h2>
+  <div class="hits-grid">
+    <div class="hit-item">
+      <span class="hit-model">PM PRO</span>
+      <span class="hit-desc">Пневматический пистолет для тренировок и развлекательной стрельбы.</span>
+    </div>
+    <div class="hit-item">
+      <span class="hit-model">«Тень-28»</span>
+      <span class="hit-desc">Травматический револьвер, сочетающий надёжность и останавливающее действие.</span>
+    </div>
+    <div class="hit-item">
+      <span class="hit-model">«Оса»</span>
+      <span class="hit-desc">Компактный травматический комплекс для повседневного ношения.</span>
+    </div>
+    <div class="hit-item">
+      <span class="hit-model">Grand Power T12</span>
+      <span class="hit-desc">Охолощенный пистолет с реалистичной имитацией выстрела.</span>
+    </div>
+  </div>
+</section>
+<section class="benefits">
+  <h2 class="benefits-title">Почему выбирают Бункер</h2>
+  <div class="benefits-grid">
+    <div class="benefit">
+      <h3>Анонимность</h3>
+      <p>Никаких паспортных данных, лицензий и регистраций. Взаимодействие через защищённые каналы связи.</p>
+    </div>
+    <div class="benefit">
+      <h3>Быстрая доставка</h3>
+      <p>Отправка в день заказа курьерскими службами и транспортными компаниями во все регионы.</p>
+    </div>
+    <div class="benefit">
+      <h3>Гарантия качества</h3>
+      <p>Оригинальная продукция с заводской гарантией. Предпродажная проверка каждого экземпляра.</p>
+    </div>
+    <div class="benefit">
+      <h3>Покупка в один клик</h3>
+      <p>Простое оформление прямо в мессенджере — без длинных анкет и ожидания подтверждений.</p>
+    </div>
+    <div class="benefit">
+      <h3>Работа по всем странам СНГ</h3>
+      <p>Доставляем в Россию, Беларусь, Казахстан и другие страны ближнего зарубежья.</p>
+    </div>
+    <div class="benefit">
+      <h3>Бесконтактное получение</h3>
+      <p>Заказ приходит в непрозрачной упаковке без опознавательных знаков, курьер не знает содержимого.</p>
+    </div>
+  </div>
+</section>
+<footer class="site-footer">
+  <p>© Бункер, 2026. Все права защищены.</p>
+  <p><a href="tg://resolve?domain=Bunker24_7">Связаться в Telegram</a></p>
+  <nav class="footer-nav">
+    <a href="/">Главная</a>
+    <a href="statya.html">Статьи</a>
+  </nav>
+</footer>
 </body>
 </html>

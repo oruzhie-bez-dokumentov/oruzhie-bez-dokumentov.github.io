@@ -1,141 +1,120 @@
 (function() {
-    'use strict';
+  'use strict';
 
-    let scene, camera, renderer, sphere;
-    let isUserInteracting = false;
-    let onMouseDownMouseX = 0, onMouseDownMouseY = 0;
-    let lon = 0, lat = 0;
-    let phi = 0, theta = 0;
-    let targetPhi = 0, targetTheta = 0;
-    const fov = 75;
-    const near = 0.1;
-    const far = 1000;
+  var container = document.getElementById('panorama-container');
+  if (!container) return;
 
-    function initPanorama() {
-        const container = document.getElementById('panorama-container');
-        if (!container || typeof THREE === 'undefined') return;
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, 0.1);
 
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a0a);
+  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
 
-        camera = new THREE.PerspectiveCamera(fov, container.clientWidth / container.clientHeight, near, far);
-        camera.position.set(0, 0, 0.1);
+  var geometry = new THREE.SphereGeometry(500, 60, 40);
+  var texture = new THREE.TextureLoader().load('assets/panorama_bunker.png');
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  var material = new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.BackSide
+  });
+  var sphere = new THREE.Mesh(geometry, material);
+  scene.add(sphere);
 
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
+  var isUserInteracting = false;
+  var onPointerDownMouseX = 0, onPointerDownMouseY = 0;
+  var lon = 0, onPointerDownLon = 0;
+  var lat = 0, onPointerDownLat = 0;
+  var phi = 0, theta = 0;
+  var targetPhi = 0, targetTheta = 0;
+  var friction = 0.075;
 
-        const geometry = new THREE.SphereGeometry(100, 128, 128);
-        const textureLoader = new THREE.TextureLoader();
-        const textureUrl = 'assets/panorama_bunker.png';
+  function onPointerDown(event) {
+    event.preventDefault();
+    var clientX, clientY;
+    if (event.touches) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    } else {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    }
+    isUserInteracting = true;
+    onPointerDownMouseX = clientX;
+    onPointerDownMouseY = clientY;
+    onPointerDownLon = lon;
+    onPointerDownLat = lat;
+  }
 
-        const material = new THREE.MeshBasicMaterial({
-            map: textureLoader.load(textureUrl, undefined, undefined, function(err) {
-                console.warn('Текстура панорамы не загружена, используется резервный цвет');
-                material.map = null;
-                material.color = new THREE.Color(0x1a1a1a);
-                material.needsUpdate = true;
-            }),
-            side: THREE.BackSide
-        });
+  function onPointerMove(event) {
+    if (!isUserInteracting) return;
+    var clientX, clientY;
+    if (event.touches) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    } else {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    }
+    lon = onPointerDownLon + (clientX - onPointerDownMouseX) * 0.25;
+    lat = onPointerDownLat - (clientY - onPointerDownMouseY) * 0.25;
+    lat = Math.max(-85, Math.min(85, lat));
+  }
 
-        sphere = new THREE.Mesh(geometry, material);
-        scene.add(sphere);
+  function onPointerUp() {
+    isUserInteracting = false;
+  }
 
-        container.addEventListener('mousedown', onPointerDown, false);
-        container.addEventListener('mousemove', onPointerMove, false);
-        container.addEventListener('mouseup', onPointerUp, false);
-        container.addEventListener('touchstart', onPointerDown, { passive: false });
-        container.addEventListener('touchmove', onPointerMove, { passive: false });
-        container.addEventListener('touchend', onPointerUp, false);
-        container.addEventListener('wheel', onDocumentMouseWheel, { passive: false });
-        window.addEventListener('resize', onWindowResize, false);
+  function onWheel(event) {
+    event.preventDefault();
+    return false;
+  }
 
-        animate();
+  container.addEventListener('mousedown', onPointerDown, { passive: false });
+  container.addEventListener('mousemove', onPointerMove, { passive: false });
+  container.addEventListener('mouseup', onPointerUp);
+  container.addEventListener('mouseleave', onPointerUp);
+  container.addEventListener('touchstart', onPointerDown, { passive: false });
+  container.addEventListener('touchmove', onPointerMove, { passive: false });
+  container.addEventListener('touchend', onPointerUp);
+  container.addEventListener('wheel', onWheel, { passive: false });
+
+  window.addEventListener('resize', function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    if (isUserInteracting) {
+      targetPhi = THREE.MathUtils.degToRad(lat);
+      targetTheta = THREE.MathUtils.degToRad(lon);
+    } else {
+      targetPhi = THREE.MathUtils.degToRad(lat);
+      targetTheta = THREE.MathUtils.degToRad(lon);
     }
 
-    function onPointerDown(event) {
-        event.preventDefault();
-        isUserInteracting = true;
-        const clientX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
-        const clientY = event.clientY || (event.touches && event.touches[0].clientY) || 0;
-        onMouseDownMouseX = clientX;
-        onMouseDownMouseY = clientY;
-        targetPhi = phi;
-        targetTheta = theta;
-    }
+    phi += (targetPhi - phi) * friction;
+    theta += (targetTheta - theta) * friction;
 
-    function onPointerMove(event) {
-        if (!isUserInteracting) return;
-        event.preventDefault();
-        const clientX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
-        const clientY = event.clientY || (event.touches && event.touches[0].clientY) || 0;
-        const deltaX = clientX - onMouseDownMouseX;
-        const deltaY = clientY - onMouseDownMouseY;
-        targetPhi = phi + deltaX * 0.3;
-        targetTheta = theta - deltaY * 0.3;
-        targetTheta = Math.max(-85, Math.min(85, targetTheta));
-    }
+    camera.position.x = 500 * Math.sin(phi) * Math.sin(theta);
+    camera.position.y = 500 * Math.cos(phi);
+    camera.position.z = 500 * Math.sin(phi) * Math.cos(theta);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    function onPointerUp() {
-        isUserInteracting = false;
-    }
+    renderer.render(scene, camera);
+  }
 
-    function onDocumentMouseWheel(event) {
-        event.preventDefault();
-    }
+  animate();
 
-    function onWindowResize() {
-        const container = document.getElementById('panorama-container');
-        if (!container || !camera || !renderer) return;
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-    }
-
-    function animate() {
-        if (!sphere || !camera) return;
-        requestAnimationFrame(animate);
-
-        const lerpFactor = 0.1;
-        phi += (targetPhi - phi) * lerpFactor;
-        theta += (targetTheta - theta) * lerpFactor;
-
-        const latRad = THREE.MathUtils.degToRad(theta);
-        const lonRad = THREE.MathUtils.degToRad(phi);
-        const lookAtX = Math.cos(latRad) * Math.cos(lonRad);
-        const lookAtY = Math.sin(latRad);
-        const lookAtZ = Math.cos(latRad) * Math.sin(lonRad);
-        camera.lookAt(lookAtX, lookAtY, lookAtZ);
-
-        renderer.render(scene, camera);
-    }
-
-    window.addEventListener('load', function() {
-        if (typeof THREE !== 'undefined') {
-            initPanorama();
-        } else {
-            const checkThree = setInterval(function() {
-                if (typeof THREE !== 'undefined') {
-                    clearInterval(checkThree);
-                    initPanorama();
-                }
-            }, 100);
-            setTimeout(function() { clearInterval(checkThree); }, 10000);
-        }
-    });
-
-    document.addEventListener('click', function(e) {
-        const link = e.target.closest('a[href="tg://resolve?domain=Bunker24_7"]');
-        if (link) {
-            if (typeof navigator.sendBeacon === 'function') {
-                const data = new URLSearchParams();
-                data.append('event', 'telegram_click');
-                data.append('page', window.location.pathname);
-                navigator.sendBeacon('/analytics', data);
-            }
-        }
-    });
-
+  window.addEventListener('load', function() {
+    texture.encoding = THREE.sRGBEncoding;
+    texture.needsUpdate = true;
+  });
 })();
