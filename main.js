@@ -8,23 +8,22 @@
   var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0, 0.1);
 
-  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
 
-  // Сфера с резервным цветом
   var geometry = new THREE.SphereGeometry(500, 60, 40);
+  var textureLoader = new THREE.TextureLoader();
   var material = new THREE.MeshBasicMaterial({
-    color: 0x1a1a1a,
+    color: 0x333333,
     side: THREE.BackSide
   });
   var sphere = new THREE.Mesh(geometry, material);
   scene.add(sphere);
 
-  // Загрузка текстуры
-  new THREE.TextureLoader().load(
+  textureLoader.load(
     'assets/panorama_bunker.png',
     function(texture) {
       texture.minFilter = THREE.LinearFilter;
@@ -34,31 +33,22 @@
       material.needsUpdate = true;
     },
     undefined,
-    function() {
-      console.warn('Панорама не загружена, показываем тёмный фон.');
+    function(err) {
+      console.warn('Фоновая панорама не загружена, используется резервная заливка.');
     }
   );
 
-  // Состояния
-  var isUserInteracting = false,
-      onPointerDownMouseX = 0,
-      onPointerDownMouseY = 0,
-      lon = 0,
-      onPointerDownLon = 0,
-      lat = 0,
-      onPointerDownLat = 0,
-      phi = 0,
-      theta = 0;
+  var canvas = renderer.domElement;
 
-  var friction = 0.04;   // Уменьшено для плавности
-  var sensitivity = 0.15; // Чувствительность мыши
-
-  function isInteractiveElement(target) {
-    return target.closest('a, button, input, select, textarea');
-  }
+  var isUserInteracting = false;
+  var onPointerDownMouseX = 0, onPointerDownMouseY = 0;
+  var lon = 0, onPointerDownLon = 0;
+  var lat = 0, onPointerDownLat = 0;
+  var phi = 0, theta = 0;
+  var targetPhi = 0, targetTheta = 0;
+  var friction = 0.075;
 
   function onPointerDown(event) {
-    if (isInteractiveElement(event.target)) return;
     event.preventDefault();
     var clientX, clientY;
     if (event.touches) {
@@ -86,30 +76,24 @@
       clientX = event.clientX;
       clientY = event.clientY;
     }
-    lon = onPointerDownLon + (clientX - onPointerDownMouseX) * sensitivity;
-    lat = onPointerDownLat - (clientY - onPointerDownMouseY) * sensitivity;
+    lon = onPointerDownLon + (clientX - onPointerDownMouseX) * 0.15;
+    lat = onPointerDownLat - (clientY - onPointerDownMouseY) * 0.15;
     lat = Math.max(-85, Math.min(85, lat));
   }
 
   function onPointerUp(event) {
-    if (event && isInteractiveElement(event.target)) return;
     isUserInteracting = false;
   }
 
-  function onWheel(event) {
-    if (isInteractiveElement(event.target)) return;
-    event.preventDefault();
-  }
+  canvas.addEventListener('mousedown', onPointerDown, { passive: false });
+  canvas.addEventListener('mousemove', onPointerMove, { passive: false });
+  canvas.addEventListener('mouseup', onPointerUp);
+  canvas.addEventListener('mouseleave', onPointerUp);
 
-  document.addEventListener('mousedown', onPointerDown, { passive: false });
-  document.addEventListener('mousemove', onPointerMove, { passive: false });
-  document.addEventListener('mouseup', onPointerUp);
-  document.addEventListener('mouseleave', onPointerUp);
-  document.addEventListener('touchstart', onPointerDown, { passive: false });
-  document.addEventListener('touchmove', onPointerMove, { passive: false });
-  document.addEventListener('touchend', onPointerUp);
-  document.addEventListener('touchcancel', onPointerUp);
-  document.addEventListener('wheel', onWheel, { passive: false });
+  canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+  canvas.addEventListener('touchmove', onPointerMove, { passive: false });
+  canvas.addEventListener('touchend', onPointerUp);
+  canvas.addEventListener('touchcancel', onPointerUp);
 
   window.addEventListener('resize', function() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -120,8 +104,8 @@
   function animate() {
     requestAnimationFrame(animate);
 
-    var targetPhi = THREE.MathUtils.degToRad(lat);
-    var targetTheta = THREE.MathUtils.degToRad(lon);
+    targetPhi = THREE.MathUtils.degToRad(lat);
+    targetTheta = THREE.MathUtils.degToRad(lon);
 
     phi += (targetPhi - phi) * friction;
     theta += (targetTheta - theta) * friction;
